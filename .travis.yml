@@ -18,7 +18,7 @@ addons:
     - dotnet-sharedframework-microsoft.netcore.app-1.1.2
 
 script:
-  - ./build.sh
+  - sh ./build.sh
 
 matrix:
   fast_finish: true
