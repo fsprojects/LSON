@@ -1,0 +1,2 @@
+# LSON
+Lisp inspired serialization
