@@ -1,13 +1,18 @@
 module Tests
-
-
 open Expecto
 open LSON
+(*
+[<Fact>]
+let ``symbol value`` () =
+
+[<Fact>]
+let ``X`` () =
+  Assert.Equal("(symbol 1 2 3)", S.parse "(symbol 1 2 3)" |> S.printList)
+*)
 
 [<Tests>]
 let tests =
   testList "samples" [
-    testCase "Say hello all" <| fun _ ->
-      let subject = Say.hello "all"
-      Expect.equal subject "Hello all" "You didn't say hello"
+    testCase "symbol value" <| fun _ ->
+      Expect.equal "(symbol \"value\")" (LSON.parse "(symbol \"value\")" |> LSON.stringify) "should be able to parse and stringify symbol"
   ]
