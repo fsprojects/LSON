@@ -43,7 +43,12 @@ do sValueRef := choice [
                         sList
                        ]
 let sExpr = ws >>. sValue .>> ws .>> eof
-let parse str =run sExpr str
+let parse str =
+  let r= run sExpr str
+  match r with
+  | Success (v,_,_)->v
+  | Failure (str,err,_)-> failwithf "%s %A" str err
+
 let rec stringify (expr:SExpr) :string=
   match expr with
   | List ls -> let innerStrings = List.map stringify ls
