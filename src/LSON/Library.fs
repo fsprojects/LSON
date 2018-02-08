@@ -9,20 +9,22 @@ type SExpr =
 let str s = pstring s
 
 let stringLiteral =
-  let escape =  anyOf "\"\\/bfnrt"
+  let escape =  anyOf "\"\\/abfnrtv"
                 |>> function
+                    | 'a' -> "\u0007"
                     | 'b' -> "\b"
                     | 'f' -> "\u000C"
                     | 'n' -> "\n"
                     | 'r' -> "\r"
                     | 't' -> "\t"
+                    | 'v' -> "\u000B"
                     | c   -> string c // every other char is mapped to itself
 
   let unicodeEscape =
       /// converts a hex char ([0-9a-fA-F]) to its integer number (0-15)
       let hex2int c = (int c &&& 15) + (int c >>> 6)*9
 
-      str "u" >>. pipe4 hex hex hex hex (fun h3 h2 h1 h0 ->
+      str "x" >>. pipe4 hex hex hex hex (fun h3 h2 h1 h0 ->
           (hex2int h3)*4096 + (hex2int h2)*256 + (hex2int h1)*16 + hex2int h0
           |> char |> string
       )
@@ -59,10 +61,14 @@ let parse str =
   match r with
   | Success (v,_,_)->v
   | Failure (str,err,_)-> failwithf "%s %A" str err
-
+type internal ME= System.Text.RegularExpressions.MatchEvaluator
+type internal Regex= System.Text.RegularExpressions.Regex
 let rec stringify (expr:SExpr) :string=
+  let escapeChars = Regex("[\"]")
+  let escape s = escapeChars.Replace(s, ME(fun m->sprintf "\\%s" m.Value))
+
   match expr with
   | Token t -> t
   | List ls -> let innerStrings = List.map stringify ls
                sprintf "(%s)" <| String.concat " " innerStrings
-  | String s -> sprintf "\"%s\"" s
+  | String s -> sprintf "\"%s\"" <| escape s
