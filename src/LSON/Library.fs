@@ -2,6 +2,7 @@ module LSON
 open FParsec
 
 type SExpr =
+  | Token of System.String
   | String of System.String
   | List of SExpr list
 
@@ -35,11 +36,21 @@ let stringLiteral =
 let sString = stringLiteral |>> SExpr.String
 let ws = spaces // skips any whitespace
 let sValue, sValueRef = createParserForwardedToRef<SExpr, unit>()
+let ws1 = skipMany1Satisfy System.Char.IsWhiteSpace
+
+let sToken =
+  let symbol = "!$%&|*+-/:<=>?@^_~#"
+  let isIdentifierStart = fun c -> isAsciiLetter c || isAnyOf symbol c
+  let isIdentifierCont  = fun c -> isAsciiLetter c || isDigit c || isAnyOf symbol c
+  let identifierString = many1Satisfy2 isIdentifierStart isIdentifierCont
+  identifierString |>> Token
+
 let sList =
-  between (str "[") (str "]")
-          (ws >>. sepBy (sValue .>> ws) ws |>> SExpr.List)
+  between (skipChar '(') (skipChar ')')
+          (sepBy sValue ws1 |>> SExpr.List)
 do sValueRef := choice [
                         sString
+                        sToken
                         sList
                        ]
 let sExpr = ws >>. sValue .>> ws .>> eof
@@ -51,6 +62,7 @@ let parse str =
 
 let rec stringify (expr:SExpr) :string=
   match expr with
+  | Token t -> t
   | List ls -> let innerStrings = List.map stringify ls
                sprintf "(%s)" <| String.concat " " innerStrings
-  | String s -> s
+  | String s -> sprintf "\"%s\"" s

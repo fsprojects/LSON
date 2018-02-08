@@ -20,28 +20,28 @@ module internal Z=
   module Foo=
    let serialize (this:Foo)=
       E.List [
-                E.String "alpha"; E.String this.alpha
-                E.String "beta"; E.String this.beta
+                E.Token "alpha"; E.String this.alpha
+                E.Token "beta"; E.String this.beta
              ]
    let deSerialize(v:E) : Foo option=
       match v with
       | E.List [
-                E.String "alpha"; E.String alpha
-                E.String "beta"; E.String beta
+                E.Token "alpha"; E.String alpha
+                E.Token "beta"; E.String beta
                ] -> Some { alpha=alpha; beta=beta }
       | _ -> None
 
   module Bar=
     let serialize this=
       E.List [
-                E.String "gamma"; E.String this.gamma
-                E.String "foo"; Foo.serialize this.foo
+                E.Token "gamma"; E.String this.gamma
+                E.Token "foo"; Foo.serialize this.foo
              ]
     let deSerialize(v:E)=
       match v with
       | E.List [
-                E.String "gamma"; E.String gamma
-                E.String "foo"; foo
+                E.Token "gamma"; E.String gamma
+                E.Token "foo"; foo
                ] ->
                  Foo.deSerialize foo |> Option.map (fun foo-> { gamma=gamma; foo= foo})
       | _ -> None
@@ -49,29 +49,29 @@ module internal Z=
   module Baz=
     let serialize this=
       E.List [
-                E.String "alpha"; E.String this.alpha
-                E.String "beta"; E.String this.beta
+                E.Token "alpha"; E.String this.alpha
+                E.Token "beta"; E.String this.beta
              ]
     let deSerialize(v:E)=
       match v with
       | E.List [
-                E.String "alpha"; E.String alpha
-                E.String "beta"; E.String beta
+                E.Token "alpha"; E.String alpha
+                E.Token "beta"; E.String beta
                ] -> Some { alpha=alpha; beta=beta }
       | _ -> None
   module Qux=
     let serialize (this:Qux)=
       match this with
-      | Ena s-> E.List [ E.String "Ena"; E.String s ]
-      | Dio foo -> E.List [ E.String "Dio"; Foo.serialize foo ]
-      | Trea bar -> E.List [ E.String "Trea"; Bar.serialize bar ]
-      | Tessera baz -> E.List [ E.String "Tessera"; Baz.serialize baz ]
+      | Ena s-> E.List [ E.Token "Ena"; E.String s ]
+      | Dio foo -> E.List [ E.Token "Dio"; Foo.serialize foo ]
+      | Trea bar -> E.List [ E.Token "Trea"; Bar.serialize bar ]
+      | Tessera baz -> E.List [ E.Token "Tessera"; Baz.serialize baz ]
     let deSerialize(v:E)=
       match v with
-      | E.List [ E.String "Ena"; E.String s ] -> Some <| Ena s
-      | E.List [ E.String "Dio"; foo ] -> Foo.deSerialize foo |> Option.map Dio
-      | E.List [ E.String "Trea"; bar ] -> Bar.deSerialize bar |> Option.map Trea
-      | E.List [ E.String "Tessera"; baz ] -> Baz.deSerialize baz |> Option.map Tessera
+      | E.List [ E.Token "Ena"; E.String s ] -> Some <| Ena s
+      | E.List [ E.Token "Dio"; foo ] -> Foo.deSerialize foo |> Option.map Dio
+      | E.List [ E.Token "Trea"; bar ] -> Bar.deSerialize bar |> Option.map Trea
+      | E.List [ E.Token "Tessera"; baz ] -> Baz.deSerialize baz |> Option.map Tessera
       | _ -> None
 
 
@@ -96,4 +96,27 @@ let tests =
        ((NP) "Dr Chan"))"""
 
       LSON.parse c |> ignore
+    testCase "Can parse (\"S\")"  <| fun _ ->
+      let c= "(\"S\")"
+      let res = LSON.parse c 
+      Expect.equal (E.List [E.String "S"]) res "should be able to interpret (\"S\")"
+
+    testCase "Can parse (S)"  <| fun _ ->
+      let c= "(S)"
+      let res = LSON.parse c 
+      Expect.equal (E.List [E.Token "S"]) res "should be able to interpret (S)"
+
+    testCase "Can parse empty ()"  <| fun _ ->
+      let c= "()"
+      let res = LSON.parse c 
+      Expect.equal (E.List []) res "should be able to interpret empty ()"
+    testCase "Can parse empty string"  <| fun _ ->
+      let c= "\"\""
+      let res = LSON.parse c 
+      Expect.equal (E.String "") res "should be able to interpret empty string"
+    testCase "Can parse identifier"  <| fun _ ->
+      let c= "identifier"
+      let res = LSON.parse c 
+      Expect.equal (E.Token "identifier") res "should be able to interpret identifier"
   ]
+
