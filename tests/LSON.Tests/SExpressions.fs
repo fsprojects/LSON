@@ -1,7 +1,7 @@
 module SExpressions
 open Expecto
 open LSON
-type E=SExpr
+type internal E=SExpr
 
 type Foo={ alpha:string; beta:string}
 
