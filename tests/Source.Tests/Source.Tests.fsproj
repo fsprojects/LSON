@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>netcoreapp2.0;netcoreapp1.1;net461</TargetFrameworks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../LSON.fs" />
+    <Compile Include="../LSON.Tests/SExpressions.fs" />
+    <Compile Include="../LSON.Tests/Tests.fs" />
+    <Compile Include="../LSON.Tests/Main.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Expecto" Version="5.1.*" />
+    <PackageReference Include="FsCheck" Version="2.10.*" />
+    <PackageReference Include="FSharp.Core" Version="4.2.*" />
+    <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="1.0.0" />
+    <DotNetCliToolReference Include="dotnet-mono" Version="[0.3.4]" />
+    <PackageReference Include="Expecto.FsCheck" Version="5.1.*" />
+  </ItemGroup>
+</Project>
