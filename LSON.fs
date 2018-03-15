@@ -17,6 +17,7 @@ let private tokenize source =
         | '\\' :: 'r' :: t -> string (acc + "\r") t // escaped return
         | '\\' :: 't' :: t -> string (acc + "\t") t // escaped tab
         | '\\' :: '\\' :: t -> string (acc + "\\") t // escaped backslash
+        | '\\' :: 'v' :: t -> string (acc + "\u000B") t //
         | '"' :: t -> acc, t // closing quote terminates
         | c :: t -> string (acc + (c.ToString())) t // otherwise accumulate chars
         | _ -> failwith "Malformed string."

@@ -27,3 +27,6 @@ matrix:
     - mono: alpha
     - mono: beta
     - mono: weekly
+branches:
+  only: 
+    - master
