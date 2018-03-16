@@ -13,6 +13,15 @@
     <RepositoryType>git</RepositoryType>
     <Authors>wallymathieu</Authors>
     <RepositoryUrl>https://github.com/fsprojects/LSON</RepositoryUrl>
+    <VersionPrefix  Condition=" '$(PackageVersion)' == '' ">0.1.0</VersionPrefix>
+    <VersionPrefix Condition=" '$(PackageVersion)' != '' ">$(PackageVersion)</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
+
+    <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
+    <Version Condition=" '$(VersionSuffix)' == '' ">$(VersionPrefix)</Version>
+    <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
+    <FileVersion>$(VersionPrefix).0</FileVersion>
+    <PackageReleaseNotes Condition=" '$(PackageReleaseNotes)' != '' ">$(PackageReleaseNotes)</PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <Optimize>true</Optimize>
