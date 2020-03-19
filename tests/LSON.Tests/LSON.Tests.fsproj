@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>netcoreapp2.0;netcoreapp1.1;net461</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../../src/LSON/LSON.fsproj" />
@@ -14,7 +14,7 @@
   <ItemGroup>
     <PackageReference Include="Expecto" Version="5.1.*" />
     <PackageReference Include="FsCheck" Version="2.10.*" />
-    <PackageReference Include="FSharp.Core" Version="4.2.*" />
+    <PackageReference Update="FSharp.Core" Version="4.3.*" />
     <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="1.0.0" />
     <DotNetCliToolReference Include="dotnet-mono" Version="[0.3.4]" />
     <PackageReference Include="Expecto.FsCheck" Version="5.1.*" />

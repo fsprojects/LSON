@@ -1,32 +1,12 @@
 language: csharp
-sudo: required
-dist: trusty
-
-dotnet: 2.0.3
-mono:
-  - 5.4.1
-  - latest # => "stable release"
-  - alpha
-  - beta
-  - weekly # => "latest commits"
-os:
-  - linux
-
-addons:
-  apt:
-    packages:
-    - dotnet-sharedframework-microsoft.netcore.app-1.1.2
+dotnet: 3.1.102
 
 script:
   - sh ./build.sh
 
 matrix:
   fast_finish: true
-  allow_failures:
-    - mono: latest
-    - mono: alpha
-    - mono: beta
-    - mono: weekly
+
 branches:
   only: 
     - master

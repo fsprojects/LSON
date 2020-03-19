@@ -71,4 +71,5 @@ let rec stringify (expr:SExpr) :string=
   | Token t -> t
   | List ls -> let innerStrings = List.map stringify ls
                sprintf "(%s)" <| String.concat " " innerStrings
+  | String s when isNull s -> "\"\""
   | String s -> sprintf "\"%s\"" <| escape s
