@@ -98,25 +98,29 @@ let tests =
       LSON.parse c |> ignore
     testCase "Can parse (\"S\")"  <| fun _ ->
       let c= "(\"S\")"
-      let res = LSON.parse c 
-      Expect.equal (E.List [E.String "S"]) res "should be able to interpret (\"S\")"
+      let res = LSON.parse c
+      Expect.equal res (E.List [E.String "S"]) "should be able to interpret (\"S\")"
 
     testCase "Can parse (S)"  <| fun _ ->
       let c= "(S)"
-      let res = LSON.parse c 
-      Expect.equal (E.List [E.Token "S"]) res "should be able to interpret (S)"
+      let res = LSON.parse c
+      Expect.equal res (E.List [E.Token "S"]) "should be able to interpret (S)"
 
     testCase "Can parse empty ()"  <| fun _ ->
       let c= "()"
-      let res = LSON.parse c 
-      Expect.equal (E.List []) res "should be able to interpret empty ()"
+      let res = LSON.parse c
+      Expect.equal res (E.List []) "should be able to interpret empty ()"
     testCase "Can parse empty string"  <| fun _ ->
       let c= "\"\""
-      let res = LSON.parse c 
-      Expect.equal (E.String "") res "should be able to interpret empty string"
+      let res = LSON.parse c
+      Expect.equal res (E.String "") "should be able to interpret empty string"
+    testCase "Can parse null string"  <| fun _ ->
+      let c= E.String null |> stringify
+      let res = LSON.parse c
+      Expect.equal res (E.String "") "null string should be the same as empty string"
     testCase "Can parse identifier"  <| fun _ ->
       let c= "identifier"
-      let res = LSON.parse c 
-      Expect.equal (E.Token "identifier") res "should be able to interpret identifier"
+      let res = LSON.parse c
+      Expect.equal res (E.Token "identifier") "should be able to interpret identifier"
   ]
 
