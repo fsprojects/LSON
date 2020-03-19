@@ -1,3 +1,6 @@
+#### 0.1.2 - 19.03.2020
+* Treat null strings as empty strings
+
 #### 0.1.1 - 16.03.2018
 * Implementation release
 
