@@ -56,8 +56,8 @@ let parseNumberOrSymbol string =
 
 module internal TextIO=
   open System.IO
-  let input1 (s:Stream)=None
-  let lookahead (s:Stream)=None
+  let input1 (s:Stream) = if s.CanRead then Some (char (s.ReadByte())) else None;
+  let lookahead (s:Stream) = use r = new StreamReader(s,leaveOpen=true) in if s.CanRead then Some (char (r.Peek())) else None
   let output (s:Stream,s1:string) = use w = new StreamWriter(s,leaveOpen=true) in w.Write s1 ; w.Flush()
   let output1 (s:Stream,s1:char)= use w = new StreamWriter(s,leaveOpen=true) in w.Write s1 ; w.Flush()
 let rec skipRestOfLine stream =
@@ -157,7 +157,7 @@ let rec readList stream =
                        |  Some form -> loop (form :: forms))
     in EList (List.rev (loop []))
 
-let read = read1 readList
+let read s = read1 readList s
 
 let readAll stream =
     let rec loop forms =
