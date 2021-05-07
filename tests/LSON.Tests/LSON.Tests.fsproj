@@ -10,6 +10,7 @@
     <Compile Include="SExpressions.fs" />
     <Compile Include="Tests.fs" />
     <Compile Include="Main.fs" />
+    <Compile Include="Pose.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Expecto" Version="5.1.*" />

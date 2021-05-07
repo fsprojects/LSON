@@ -5,7 +5,12 @@ let sampleStrings =
     "(symbol \"value\")"
     "(\"value with \\\" \")"
     //, \n, \v, \f, \r
+    "; Foo"
+    "  ; Bar"
+    "( 1 2  (|asdo\|aisdj| \"dfdosi dsi\"))"
+    "()"
   ]
+
 let testCaseOfSample sample=
   testCase <| sprintf "sample %s" sample <| fun _ ->
     Expect.equal sample (LSON.parse sample |> LSON.stringify) <| sprintf "should be able to parse and stringify %s" sample
